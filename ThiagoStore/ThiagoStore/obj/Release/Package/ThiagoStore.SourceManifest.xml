@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sitemanifest>
+  <IisApp path="C:\Users\tbsou\OneDrive\Área de Trabalho\POS\DM106\projeto\DM106\ThiagoStore\ThiagoStore\obj\Release\Package\PackageTmp" />
+  <setAcl path="C:\Users\tbsou\OneDrive\Área de Trabalho\POS\DM106\projeto\DM106\ThiagoStore\ThiagoStore\obj\Release\Package\PackageTmp" setAclResourceType="Directory" />
+  <setAcl path="C:\Users\tbsou\OneDrive\Área de Trabalho\POS\DM106\projeto\DM106\ThiagoStore\ThiagoStore\obj\Release\Package\PackageTmp" setAclUser="anonymousAuthenticationUser" setAclResourceType="Directory" />
+</sitemanifest>

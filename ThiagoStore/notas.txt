@@ -1,0 +1,63 @@
+CREDENCIAIS DE ACESSO BANCO DE DADOS AZURE
+
+Up_Admin1234
+
+********************************************************
+
+
+context.Products.AddOrUpdate(
+	p => p.Id,
+	new Product { Id = 1, nome = "produto 1", codigo = "COD1", descricao = "descrição produto 1", preco = 10, cor = "azul", modelo = "A", peso = 1, altura = 1, largura = 1, comprimento = 1, diametro = 1, imagem = "http"},
+	new Product { Id = 2, nome = "produto 2", codigo = "COD2", descricao = "descrição produto 2", preco = 20, cor = "verde", modelo = "B", peso = 2, altura = 2, largura = 2, comprimento = 2, diametro = 2, imagem = "http"},
+	new Product { Id = 3, nome = "produto 3", codigo = "COD3", descricao = "descrição produto 3", preco = 30, cor = "roxo", modelo = "C", peso = 2, altura = 1, largura = 2, comprimento = 1, diametro = 2, imagem = "http" }
+);
+
+
+********************************************************
+
+Install-Package leeksnet.AspNet.WebApi.Wadl
+
+
+********************************************************
+
+	public int Id { get; set; }
+
+        public string email { get; set; }
+
+        public string data { get; set; }
+
+        public string status { get; set; }
+
+        public decimal precoTotal { get; set; }
+
+        public decimal pesoTotal { get; set; }
+
+        public decimal precoFrete { get; set; }
+
+
+********************************************************
+
+{
+    "Email": "admin@thiagostore.com",
+    "Password": "Admin#7",
+    "ConfirmPassword": "Admin#7"
+}
+
+
+{
+    "Email": "user@thiagostore.com",
+    "Password": "User#77",
+    "ConfirmPassword": "User#77"
+}
+
+********************************************************
+1 - USER
+2 - ADMIN
+
+157a7729-4f85-4d2b-b5a3-22b3dbcabc5b
+user@thiagostore.com
+
+17f0151c-e293-4825-85cd-aee54b710238
+admin@thiagostore.com
+
+********************************************************
