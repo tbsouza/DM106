@@ -31,5 +31,7 @@ namespace ThiagoStore.Models
         }
 
         public System.Data.Entity.DbSet<ThiagoStore.Models.Product> Products { get; set; }
+
+        public System.Data.Entity.DbSet<ThiagoStore.Models.Order> Orders { get; set; }
     }
 }

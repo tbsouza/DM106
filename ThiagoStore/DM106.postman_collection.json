@@ -1,0 +1,287 @@
+{
+	"info": {
+		"_postman_id": "71a652ac-12ec-444b-9f62-a377d300f114",
+		"name": "DM106",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:57999/api/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57999",
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "http://localhost:57999/api/products"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:57999/api/products/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57999",
+					"path": [
+						"api",
+						"products",
+						"2"
+					]
+				},
+				"description": "http://localhost:57999/api/products/2"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product by ID Azure",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://thiagostoredm106.azurewebsites.net/api/products/2",
+					"protocol": "https",
+					"host": [
+						"thiagostoredm106",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"products",
+						"2"
+					]
+				},
+				"description": "https://thiagostoredm106.azurewebsites.net/api/products/2"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Products Azure",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://thiagostoredm106.azurewebsites.net/api/products",
+					"protocol": "https",
+					"host": [
+						"thiagostoredm106",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "https://thiagostoredm106.azurewebsites.net/api/products"
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Email\": \"user@thiagostore.com\",\n    \"Password\": \"User#77\",\n    \"ConfirmPassword\": \"User#77\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:57999/api/Account/Register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57999",
+					"path": [
+						"api",
+						"Account",
+						"Register"
+					]
+				},
+				"description": "http://localhost:57999/api/Account/Register"
+			},
+			"response": []
+		},
+		{
+			"name": "Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "grant_type=password&username=admin@thiagostore.com&password=Admin#7"
+				},
+				"url": {
+					"raw": "http://localhost:57999/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57999",
+					"path": [
+						"token"
+					]
+				},
+				"description": "http://localhost:57999/token"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Values with authorization",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "BiVmzeLoxMViGyampEAc_b4aGRAb3fgCzjqq7YtPzmSwZzU9M4bVjIk6H8qD_wtPWxpuD-IJHgeKPU3ZOKWuG15qYAjiNp0iTIlxtnEm3-dhxWQln7Isc4XjtW_NycTcXP6qUdDw0JgYNVSCzuiXebBuL25jAxn8xUZp0PhtHWtaKeWOhn7StM3JckBvbozhDaWNDjuQuBmA4q5NiZSEiq0BxS1LcBMC2RKOlosuLEAEzvUuFEbgyHBke1PAtDASkmkrMR_8t9ZH2t7geEWelYpY46Y4lvJa4n6HniBH9hnZhYRxJNJuYkK4WfMukNeL7T1H2KFLjZMf0puvecL_t7wOfhNftbPVFew-4t2hPFwSQn1t71STYsMESxsSmfe_a621JSM9Dxjyn-GCLFb6PAyPJjQTQGB8iaMecLmj2gv0k1wqnlCands3A5PDybE1FWLLXScpHg4BK8sohGo6XTE3VY9zDzpUZ-R_EBlbQijN1KqMG0YvLFbPgGAR7VD0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:57999/api/values",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57999",
+					"path": [
+						"api",
+						"values"
+					]
+				},
+				"description": "http://localhost:57999/api/values"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Orders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:57999/api/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "57999",
+					"path": [
+						"api",
+						"orders"
+					]
+				},
+				"description": "http://localhost:57999/api/orders"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customers CRM",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "crmwebapi",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "crmwebapi",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://siecolacrm.azurewebsites.net/api/customers",
+					"protocol": "http",
+					"host": [
+						"siecolacrm",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"customers"
+					]
+				},
+				"description": "http://siecolacrm.azurewebsites.net/api/customers"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Customer by Email",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "crmwebapi",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "crmwebapi",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://siecolacrm.azurewebsites.net/api/customers/byemail?email=matilde@siecolasystems.com",
+					"protocol": "http",
+					"host": [
+						"siecolacrm",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"customers",
+						"byemail"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "matilde@siecolasystems.com"
+						}
+					]
+				},
+				"description": "http://siecolacrm.azurewebsites.net/api/customers/byemail?email="
+			},
+			"response": []
+		}
+	]
+}

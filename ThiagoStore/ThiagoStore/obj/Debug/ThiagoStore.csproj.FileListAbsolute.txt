@@ -114,3 +114,5 @@ C:\Users\tbsou\OneDrive\Área de Trabalho\POS\DM106\projeto\DM106\ThiagoStore\Th
 C:\Users\tbsou\OneDrive\Área de Trabalho\POS\DM106\projeto\DM106\ThiagoStore\ThiagoStore\obj\Debug\ThiagoStore.Migrations.Initial.resources
 C:\Users\tbsou\OneDrive\Área de Trabalho\POS\DM106\projeto\DM106\ThiagoStore\ThiagoStore\obj\Debug\ThiagoStore.csproj.GenerateResource.cache
 C:\Users\tbsou\OneDrive\Área de Trabalho\POS\DM106\projeto\DM106\ThiagoStore\ThiagoStore\bin\leeksnet.AspNet.WebApi.Wadl.dll
+C:\Users\tbsou\OneDrive\Área de Trabalho\POS\DM106\projeto\DM106\ThiagoStore\ThiagoStore\obj\Debug\ThiagoStore.Migrations.AddOrderAndOrderItem.resources
+C:\Users\tbsou\OneDrive\Área de Trabalho\POS\DM106\projeto\DM106\ThiagoStore\ThiagoStore\obj\Debug\ThiagoStore.Migrations.AddOrderAndOrderItem1.resources

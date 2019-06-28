@@ -12,6 +12,8 @@ using ThiagoStore.Models;
 
 namespace ThiagoStore.Controllers
 {
+    [Authorize]
+    [RoutePrefix("api/products")]
     public class ProductsController : ApiController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -113,6 +115,21 @@ namespace ThiagoStore.Controllers
         private bool ProductExists(int id)
         {
             return db.Products.Count(e => e.Id == id) > 0;
+        }
+
+        // *** Novos Métodos ***
+
+        [ResponseType(typeof(Product))]
+        [HttpGet]
+        [Route("byname")]
+        public IHttpActionResult GetProductByName(string name)
+        {
+            var product = db.Products.Where(p => p.nome == name);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
         }
     }
 }
