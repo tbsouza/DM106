@@ -28,6 +28,8 @@ namespace ThiagoStore.Models
 
         public decimal precoFrete { get; set; }
 
+        public decimal pesoTotal { get; set; }
+
         public virtual ICollection<OrderItem> OrderItems
         {
             get;

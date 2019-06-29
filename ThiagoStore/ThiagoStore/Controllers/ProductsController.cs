@@ -19,13 +19,16 @@ namespace ThiagoStore.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/Products
+        [Authorize]
         public IQueryable<Product> GetProducts()
         {
             return db.Products;
         }
 
+
         // GET: api/Products/5
         [ResponseType(typeof(Product))]
+        [Authorize]
         public IHttpActionResult GetProduct(int id)
         {
             Product product = db.Products.Find(id);
@@ -37,8 +40,10 @@ namespace ThiagoStore.Controllers
             return Ok(product);
         }
 
+
         // PUT: api/Products/5
         [ResponseType(typeof(void))]
+        [Authorize(Roles = "ADMIN")]
         public IHttpActionResult PutProduct(int id, Product product)
         {
             if (!ModelState.IsValid)
@@ -74,6 +79,7 @@ namespace ThiagoStore.Controllers
 
         // POST: api/Products
         [ResponseType(typeof(Product))]
+        [Authorize(Roles = "ADMIN")]
         public IHttpActionResult PostProduct(Product product)
         {
             if (!ModelState.IsValid)
@@ -89,9 +95,11 @@ namespace ThiagoStore.Controllers
 
         // DELETE: api/Products/5
         [ResponseType(typeof(Product))]
+        [Authorize(Roles = "ADMIN")]
         public IHttpActionResult DeleteProduct(int id)
         {
             Product product = db.Products.Find(id);
+
             if (product == null)
             {
                 return NotFound();
@@ -121,15 +129,20 @@ namespace ThiagoStore.Controllers
 
         [ResponseType(typeof(Product))]
         [HttpGet]
+        [Authorize]
         [Route("byname")]
         public IHttpActionResult GetProductByName(string name)
         {
             var product = db.Products.Where(p => p.nome == name);
+
             if (product == null)
             {
                 return NotFound();
             }
+
             return Ok(product);
         }
+
+        
     }
 }

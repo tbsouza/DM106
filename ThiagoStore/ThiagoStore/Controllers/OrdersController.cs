@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ThiagoStore.br.com.correios.ws;
+using ThiagoStore.CRMClient;
 using ThiagoStore.Models;
 
 namespace ThiagoStore.Controllers
@@ -19,22 +20,38 @@ namespace ThiagoStore.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/Orders
+
+        // GET: api/Orders - Get All orders
+        [ResponseType(typeof(List<Order>))]
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet]
+        [Route("orders")]
         public List<Order> GetOrders()
         {
             return db.Orders.Include(order => order.OrderItems).ToList();
         }
 
+
+
         // GET: api/Orders/5
         [ResponseType(typeof(Order))]
+        [Authorize]
         public IHttpActionResult GetOrder(int id)
         {
             Order order = db.Orders.Find(id);
+
+            // Order not found
             if (order == null)
             {
                 return NotFound();
             }
 
+            // Check user email or admin
+            if (User.Identity.Name != order.userEmail || !User.IsInRole("ADMIN")) {
+                return StatusCode(HttpStatusCode.Unauthorized);
+            }
+
+            // Order ok
             return Ok(order);
         }
 
@@ -75,6 +92,7 @@ namespace ThiagoStore.Controllers
 
         // POST: api/Orders
         [ResponseType(typeof(Order))]
+        [Authorize]
         public IHttpActionResult PostOrder(Order order)
         {
             if (!ModelState.IsValid)
@@ -82,6 +100,14 @@ namespace ThiagoStore.Controllers
                 return BadRequest(ModelState);
             }
 
+            // infos iniciais do pedido
+            order.statusPedido = "novo";
+            order.pesoTotal = 0;
+            order.precoFrete = 0;
+            order.precoTotal = 0;
+            order.dataPedido = DateTime.Today.ToString(); // data atual, criação do pedido
+
+            // adiciona o novo pedido no banco
             db.Orders.Add(order);
             db.SaveChanges();
 
@@ -93,9 +119,16 @@ namespace ThiagoStore.Controllers
         public IHttpActionResult DeleteOrder(int id)
         {
             Order order = db.Orders.Find(id);
+
             if (order == null)
             {
                 return NotFound();
+            }
+
+            // Check user email or admin
+            if (User.Identity.Name != order.userEmail || !User.IsInRole("ADMIN"))
+            {
+                return StatusCode(HttpStatusCode.Unauthorized);
             }
 
             db.Orders.Remove(order);
@@ -123,22 +156,87 @@ namespace ThiagoStore.Controllers
         [ResponseType(typeof(string))]
         [HttpGet]
         [Route("frete")]
-        public IHttpActionResult CalculaFrete()
+        public IHttpActionResult CalculaFrete(string cepDestino, decimal peso, decimal comprimento,
+                                decimal altura, decimal largura, decimal diametro, decimal valor,
+                                Order order)
         {
             string frete;
 
             CalcPrecoPrazoWS correios = new CalcPrecoPrazoWS();
 
-            cResultado resultado = correios.CalcPrecoPrazo("", "", "40010", "37540000", "37002970", "1", 1, 30, 30, 30, 30, "N", 100, "S");
+            // cep origem - Santa Rita 37540000
+            cResultado resultado = correios.CalcPrecoPrazo("", "", "40010", "37540000", cepDestino, 
+                                        peso.ToString(), 1, comprimento, altura, largura, diametro,
+                                        "N", valor, "S");
 
             if (resultado.Servicos[0].Erro.Equals("0"))
             {
-                frete = "Valor do frete: " + resultado.Servicos[0].Valor + " - Prazo de entrega: " + resultado.Servicos[0].PrazoEntrega + " dia(s)";
+                frete = "Valor do frete: " + resultado.Servicos[0].Valor + 
+                        " - Prazo de entrega: " + resultado.Servicos[0].PrazoEntrega + " dia(s)";
+
                 return Ok(frete);
             }
             else
             {
-                return BadRequest("Código do erro: " + resultado.Servicos[0].Erro + "-" + resultado.Servicos[0].MsgErro);
+                return BadRequest("Código do erro: " + resultado.Servicos[0].Erro + "-" + 
+                    resultado.Servicos[0].MsgErro);
             }
         }
+
+        [ResponseType(typeof(string))]
+        [HttpGet]
+        [Route("cep")]
+        public IHttpActionResult ObtemCEP()
+        {
+            CRMRestClient crmClient = new CRMRestClient();
+
+            Customer customer = crmClient.GetCustomerByEmail(User.Identity.Name);
+
+            if (customer != null)
+            {
+                return Ok(customer.zip);
+            }
+            else
+            {
+                return BadRequest("Falha ao consultar o CRM");
+            }
+        }
+
+        // GET: Orders by Email
+        [ResponseType(typeof(List<Order>))]
+        [Authorize]
+        [HttpGet]
+        [Route("getOrdersByEmail")]
+        public IHttpActionResult GetOrdersByEmail(string email) {
+
+            List<Order> orders = db.Orders.Where(order => order.userEmail == email).ToList();
+
+            // Check user email or admin
+            if (User.Identity.Name != email || !User.IsInRole("ADMIN"))
+            {
+                return StatusCode(HttpStatusCode.Unauthorized);
+            }
+
+            if (orders == null) {
+                return NotFound();
+            }
+
+            return Ok(orders);
+        }
+
+
+        [Authorize]
+        [HttpGet]
+        [Route("getOrdersByEmail")]
+        public IHttpActionResult fecharPedido() {
+
+
+
+            return Ok();
+        }
+
+
+
+
+    }
 }
