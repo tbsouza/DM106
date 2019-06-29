@@ -103,7 +103,7 @@ namespace ThiagoStore.Controllers
             // infos iniciais do pedido
             order.statusPedido = "novo";
             order.pesoTotal = 0;
-            order.precoFrete = 0;
+            order.precoFrete = "0";
             order.precoTotal = 0;
             order.dataPedido = DateTime.Today.ToString(); // data atual, criação do pedido
 
@@ -156,7 +156,7 @@ namespace ThiagoStore.Controllers
         [ResponseType(typeof(string))]
         [HttpGet]
         [Route("frete")]
-        public IHttpActionResult CalculaFrete(string cepDestino, decimal peso, decimal comprimento,
+        public IHttpActionResult GetFrete(string cepDestino, decimal peso, decimal comprimento,
                                 decimal altura, decimal largura, decimal diametro, decimal valor,
                                 Order order)
         {
@@ -171,16 +171,19 @@ namespace ThiagoStore.Controllers
 
             if (resultado.Servicos[0].Erro.Equals("0"))
             {
+
+                // atribui o valor e prazo do frete a order
+                order.precoFrete = resultado.Servicos[0].Valor;
+                order.dataEntrega = order.dataPedido + resultado.Servicos[0].PrazoEntrega;
+
                 frete = "Valor do frete: " + resultado.Servicos[0].Valor + 
                         " - Prazo de entrega: " + resultado.Servicos[0].PrazoEntrega + " dia(s)";
 
                 return Ok(frete);
             }
-            else
-            {
-                return BadRequest("Código do erro: " + resultado.Servicos[0].Erro + "-" + 
+            
+            return BadRequest("Código do erro: " + resultado.Servicos[0].Erro + "-" + 
                     resultado.Servicos[0].MsgErro);
-            }
         }
 
         [ResponseType(typeof(string))]
@@ -192,14 +195,11 @@ namespace ThiagoStore.Controllers
 
             Customer customer = crmClient.GetCustomerByEmail(User.Identity.Name);
 
-            if (customer != null)
-            {
-                return Ok(customer.zip);
-            }
-            else
-            {
+            if (customer == null) {
                 return BadRequest("Falha ao consultar o CRM");
             }
+
+            return Ok(customer.zip);
         }
 
         // GET: Orders by Email
@@ -225,18 +225,93 @@ namespace ThiagoStore.Controllers
         }
 
 
-        [Authorize]
         [HttpGet]
+        [Authorize]
         [Route("getOrdersByEmail")]
-        public IHttpActionResult fecharPedido() {
+        public IHttpActionResult fecharPedido(int orderId) {
 
+            Order order = db.Orders.Find(orderId);
 
+            // Order not found
+            if (order == null)
+            {
+                return NotFound();
+            }
 
-            return Ok();
+            // Check user email or admin
+            if (User.Identity.Name != order.userEmail || !User.IsInRole("ADMIN"))
+            {
+                return StatusCode(HttpStatusCode.Unauthorized);
+            }
+
+            // Se o frete não foi calcuado, pedido não pode ser fechado
+            if (!order.precoFrete.Equals("0") ){
+                return Content(HttpStatusCode.BadRequest, "Frete ainda não foi calculado para a order.");
+            }
+
+            // Atualiza status para fechado
+            order.statusPedido = "fechado";
+
+            return Content(HttpStatusCode.OK, "Pedido fechado com sucesso.");
         }
 
+        [ResponseType(typeof(string))]
+        [HttpGet]
+        [Route("calculaFrete")]
+        [Authorize]
+        public IHttpActionResult calculaFrete(int pedidoId) {
 
+            // Pega a order a partir do ID
+            Order order = db.Orders.Find(pedidoId);
 
+            // Check for user authorization
+            if (User.Identity.Name != order.userEmail || !User.IsInRole("ADMIN"))
+            {
+                return StatusCode(HttpStatusCode.Unauthorized);
+            }
+
+            // Pega o cep do user no CRM
+            var cep = ObtemCEP().ToString();
+            if (cep == null) {
+                return Content(HttpStatusCode.NotFound, "Impossível acessar serviço de CRM.");
+            }
+
+            // verifica se o pedido possuir order items
+            if (order.OrderItems.Count == 0) {
+                return Content(HttpStatusCode.BadRequest, "Order não possui nenhum order item.");
+            }
+
+            // itera pelos order items para gerar as dimensoes
+            decimal pesoTotal = 0;
+            decimal alturaMax = 0;
+            decimal larguraMax = 0;
+            decimal compTotal = 0;
+            decimal precoTotal = 0;
+            decimal diametroMax = 0;
+
+            foreach (var item in order.OrderItems) {
+
+                // Pega o produto do item
+                Product produto = item.Product;
+
+                if (produto.altura > alturaMax) {
+                    alturaMax = produto.altura;
+                }
+
+                if (produto.largura > larguraMax ) {
+                    larguraMax = produto.largura;
+                }
+
+                compTotal += produto.comprimento;
+                precoTotal += produto.preco;
+                pesoTotal += produto.peso;
+                diametroMax += produto.diametro;
+            }
+
+            // Chama servico dos correios
+            return GetFrete(cep, pesoTotal, compTotal, alturaMax, larguraMax, diametroMax, precoTotal, order);
+        
+        }
 
     }
 }

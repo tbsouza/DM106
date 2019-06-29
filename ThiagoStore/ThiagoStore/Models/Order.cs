@@ -26,7 +26,7 @@ namespace ThiagoStore.Models
 
         public decimal precoTotal { get; set; }
 
-        public decimal precoFrete { get; set; }
+        public string precoFrete { get; set; }
 
         public decimal pesoTotal { get; set; }
 

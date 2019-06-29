@@ -233,6 +233,10 @@
     <Compile Include="Migrations\201906280036206_AddOrderAndOrderItem1.Designer.cs">
       <DependentUpon>201906280036206_AddOrderAndOrderItem1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906291902557_Final.cs" />
+    <Compile Include="Migrations\201906291902557_Final.Designer.cs">
+      <DependentUpon>201906291902557_Final.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -378,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906280036206_AddOrderAndOrderItem1.resx">
       <DependentUpon>201906280036206_AddOrderAndOrderItem1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906291902557_Final.resx">
+      <DependentUpon>201906291902557_Final.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
